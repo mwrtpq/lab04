@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake cmake-data g++ make
+
+      - name: Configure project
+        run: cmake -H. -B_build -DCMAKE_INSTALL_PREFIX=_install
+
+      - name: Build project
+        run: cmake --build _build
+
+      - name: Install project
+        run: cmake --build _build --target install
